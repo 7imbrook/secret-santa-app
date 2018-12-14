@@ -3,6 +3,7 @@ from matching.models import SecretSantaGroup, Owner
 from matching.exceptions import MatchBaseException
 from matching.service import MatchingService
 from register.service import MessageForwarder
+from register.constants import MessageStates
 from django.conf import settings
 
 # Register your models here.
@@ -12,6 +13,7 @@ class MatchingAdmin(admin.ModelAdmin):
     list_display = list(filter(None, [
         "owner_name",
         "excluded_gift_recipiants",
+        "state",
         "secret_santa_group",
         None if settings.PROD else "your_secret",
     ]))
@@ -60,8 +62,13 @@ class GroupAdmin(admin.ModelAdmin):
             f.send_all_unsent_messages()
 
     def start_the_holidays(self, request, queryset):
-        list(map(self.send_group_start_notification, queryset))
-        self.message_user(request, "Ho ho ho!")
+        for o in queryset:
+            if o.state != MessageStates.FORWARDING.value:
+                self.message_user(request, "Not everyone has set their foundation yet.", level=messages.ERROR)
+                break
+        else:
+            list(map(self.send_group_start_notification, queryset))
+            self.message_user(request, "Ho ho ho!")
 
 
 admin.site.register(SecretSantaGroup, GroupAdmin)

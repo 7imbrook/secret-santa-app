@@ -45,11 +45,15 @@ class Owner(models.Model):
         "Owner", symmetrical=True, blank=True
     )
     secret_santa_group = models.ForeignKey(
-        SecretSantaGroup, on_delete=models.DO_NOTHING, null=True, blank=True, db_constraint=False
+        SecretSantaGroup,
+        on_delete=ALSO_CLEAR_YOUR_SECRET,
+        null=True,
+        blank=True,
+        db_constraint=False,
     )
 
     your_secret = models.ForeignKey(
-        "Owner", on_delete=ALSO_CLEAR_YOUR_SECRET, null=True, db_constraint=False
+        "Owner", on_delete=models.SET_NULL, null=True, db_constraint=False, blank=True
     )
 
     # Admin Display "Function"

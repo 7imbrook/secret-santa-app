@@ -12,5 +12,8 @@ class VerificationAttempt(models.Model):
     hash = models.CharField(max_length=64)
     twilio_sid = models.CharField(max_length=64)
     number = models.ForeignKey(
-        PhoneNumber, on_delete=models.DO_NOTHING, related_name="verification_attempts"
+        PhoneNumber,
+        on_delete=models.DO_NOTHING,
+        related_name="verification_attempts",
+        db_constraint=False,
     )

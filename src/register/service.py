@@ -167,7 +167,7 @@ class MessageForwarder:
 
     def trigger_secret_santa_message(self):
         recipiant = self.owner.your_secret.owner_name
-        foundation = self.owner_name.your_secret.foundation_message
+        foundation = self.owner.your_secret.foundation_message
         you = self.owner.owner_name
         self.client.messages.create(
             to=self.owner.number.parsed_number,

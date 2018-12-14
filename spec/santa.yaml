@@ -35,7 +35,7 @@ spec:
             claimName: santa-db
       containers:
         - name: santa-app
-          image: 7imbrook/santa@sha256:31ee940ab55f3315af511ffbd09ddbfc68a624cd008035896a549b3e9b0a4046
+          image: 7imbrook/santa@sha256:ea22742cec75a7b9ca3bdb25f80fcf72a17c5d0ac3003ff5b3cc6da8d03dcb08
           volumeMounts:
             - name: database
               mountPath: /mnt/databases/santa

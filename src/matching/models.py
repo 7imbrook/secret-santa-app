@@ -49,7 +49,7 @@ class Owner(models.Model):
     )
 
     your_secret = models.ForeignKey(
-        "Owner", on_delete=models.SET_NULL, null=True, db_constraint=False
+        "Owner", on_delete=ALSO_CLEAR_YOUR_SECRET, null=True, db_constraint=False
     )
 
     # Admin Display "Function"

@@ -10,13 +10,18 @@ from django.conf import settings
 
 
 class MatchingAdmin(admin.ModelAdmin):
-    list_display = list(filter(None, [
-        "owner_name",
-        "excluded_gift_recipiants",
-        "state",
-        "secret_santa_group",
-        None if settings.PROD else "your_secret",
-    ]))
+    list_display = list(
+        filter(
+            None,
+            [
+                "owner_name",
+                "excluded_gift_recipiants",
+                "state",
+                "secret_santa_group",
+                None if settings.PROD else "your_secret",
+            ],
+        )
+    )
     ordering = ["owner_name"]
     actions = [
         "exclude_from_matching_each_other",
@@ -62,10 +67,21 @@ class GroupAdmin(admin.ModelAdmin):
             f.send_all_unsent_messages()
 
     def start_the_holidays(self, request, queryset):
-        for o in queryset:
-            if o.state != MessageStates.FORWARDING.value:
-                self.message_user(request, "Not everyone has set their foundation yet.", level=messages.ERROR)
-                break
+        for group in queryset:
+            able_to_start = all(
+                map(
+                    lambda o: o.state == MessageStates.FORWARDING.value,
+                    Owner.objects.filter(secret_santa_group=group),
+                )
+            )
+            if able_to_start:
+                continue
+            self.message_user(
+                request,
+                "Not everyone is ready to start, cannot start",
+                level=messages.WARNING,
+            )
+            break
         else:
             list(map(self.send_group_start_notification, queryset))
             self.message_user(request, "Ho ho ho!")

@@ -45,7 +45,7 @@ class Owner(models.Model):
         "Owner", symmetrical=True, blank=True
     )
     secret_santa_group = models.ForeignKey(
-        SecretSantaGroup, on_delete=models.DO_NOTHING, null=True, blank=True
+        SecretSantaGroup, on_delete=models.DO_NOTHING, null=True, blank=True, db_constraint=False
     )
 
     your_secret = models.ForeignKey(

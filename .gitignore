@@ -1,0 +1,15 @@
+.DS_Store
+.vscode/
+User-Name-c5b1367ae729.json
+kube-do-conf.yaml
+src/db.sqlite3
+src/matching/__pycache__/
+src/matching/management/commands/__pycache__/
+src/matching/migrations/__pycache__/
+src/register/__pycache__/
+src/register/api/__pycache__/
+src/register/migrations/__pycache__/
+src/santa/__pycache__/
+src/utils/__pycache__/
+static/
+venv/

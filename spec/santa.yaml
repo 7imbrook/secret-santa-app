@@ -1,0 +1,81 @@
+###
+# This is a single node deployment with a sqlite3 db backing it
+# w/ no caching or anything. It will fall in the face of success
+#                                                 ~ Michael
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: santa-db
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: do-block-storage
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-service
+  template:
+    metadata:
+      labels:
+        app: django-service
+    spec:
+      volumes:
+        - name: database
+          persistentVolumeClaim:
+            claimName: santa-db
+      containers:
+        - name: santa-app
+          image: 7imbrook/santa@sha256:a229e5b10efe18d69014df205e7c6bb75db2f20b34fa484c727255e766d3397c
+          volumeMounts:
+            - name: database
+              mountPath: /mnt/databases/santa
+          env:
+            - name: TWILIO_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: santa-env
+                  key: TWILIO_TOKEN
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: santa-env
+                  key: SECRET_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: secret-santa-app
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: django-service
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: santa
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: santa.timbrook.tech
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: secret-santa-app
+          servicePort: http
+  

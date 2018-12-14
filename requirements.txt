@@ -1,0 +1,6 @@
+django
+uwsgi
+ujson
+phonenumbers
+python-box
+twilio

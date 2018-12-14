@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{title}}</title>
+    <script src="https://unpkg.com/clipboard@2.0.0/dist/clipboard.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="/static/common.js"></script>
+    <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/static/normalize.css">
+    <link rel="stylesheet" href="/static/skeleton.css">
+</head>
+
+<body>
+    <hr />
+    <div class="container">
+        <div class="row">
+            <h3>Timbrook/Curtis (+Voigt) Secret Santa Donations!</h3>
+        </div>
+        <div class="row">
+            {% csrf_token %}
+            <label for="number_input">Phone Number</label>
+            <input style="width: 60%" type="text" id="number_input">
+            <input style="width: 30%" type="button" value="Submit" id="register_number"/>
+        </div>
+        <div class="row">
+            <div style="text-align: center" id="code_display_block" hidden>
+                <h6>Enter this code when you recieve the text</h6>
+                <h2 id="code_display"></h2>
+                <button class="btn" data-clipboard-target="#code_display">
+                    Copy to clipboard
+                </button>
+            </div>
+            <h6 style="color: red" id="error_display"></h6>
+            <h2 style="text-align: center" id="already_registered" hidden>Already Registered</h2>
+        </div>
+    </div>
+</body>
+
+</html>
